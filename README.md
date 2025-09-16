@@ -1,4 +1,5 @@
-**Es Necesario Tener jQuey, no pesa mucho y no choca con otros paquetes (que yo sepa)**
+>[!IMPORTANT]
+>Es Necesario Tener jQuery, no pesa mucho y no choca con otros paquetes (que yo sepa)
 
 Para usarlo hay que seguir ciertas reglas.
 
@@ -21,7 +22,8 @@ Aquí un ejemplo de un elemento:
 
     <input type="text" class="input" id='nombre' data-priv='required' data-type='nombre' data-nombre_per='Nombre de la Persona' placeholder='Ingresa Tu Nombre'>
 
-Para Activar el Script hay que colocar el evento en un botón con Onclick, es la forma que conozco, ya que con -addEventListener- no podés ingresar los datos de manera directa y tendrias que colocarlos tu mismo, no es el concepto que estoy buscando, pero de igual forma el Validador está sujeto a mejora.
+>[!TIP]
+>Para Activar el Script hay que colocar el evento en un botón con Onclick, es la forma que conozco, ya que con -addEventListener- no podés ingresar los datos de manera directa y tendrias que colocarlos tu mismo, no es el concepto que estoy buscando, pero de igual forma el Validador está sujeto a mejora.
 
 Aquí un Ejemplo del botón a usar:
 
