@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="CSS/styles.css">
+	<script type="text/javascript" src="jQuery/jquery-3.7.1.js" defer></script>
+	<script type="text/javascript" src="JS/validatorv3.js" defer></script>
+	<title>Validador de FormulariosV3</title>
+</head>
+<body>
+	<div class="form_container">
+		<div id="messages" class="messages_div"></div>
+		<form name="insert" class="form">
+			<input type="text" class="input" id='nombre' data-priv='required' data-type='nombre' data-nombre_per='Nombre de la Persona' placeholder='Ingresa Tu Nombre'>
+			<input type="number" class="input" id="edad" data-priv='required' data-type='numero' data-nombre_per='Edad de la Persona' placeholder='Ingresa Tu Edad'>
+			<select id="sexo" class="input" data-priv='required' data-type='nombre' data-nombre_per='Sexo de la Persona'>
+				<option value="M">Masculino</option>
+				<option value="F">Femenino</option>
+			</select>
+			<select id="comida" multiple class="input" data-priv='required' data-type='nombre' data-nombre_per='Comida Favorita'>
+				<option value="Banana">Banana</option>
+				<option value=21>Los Números</option>
+				<option value="Pomelo">Pomelo</option>
+				<option value="Plátano">Plátano</option>
+			</select>
+			<select id="musica" multiple class="input" data-priv='optional' data-type='nombre' data-nombre_per='Genero Músical'>
+				<option value="Rock">Rock</option>
+				<option value="Ost">OST</option>
+				<option value="Clásica">Clásica</option>
+				<option value="Urbana">Urbana</option>
+			</select>
+			<input type="date" id='fecha' class='input' data-priv='required' data-type='fecha' data-nombre_per='Fecha Actual'>
+			<input type="time" id="hora" class='input' data-priv='required' data-type='hora' data-nombre_per='Hora Actual'>
+			<input type="text" id='apellido' class="input" data-priv='optional' data-type='nombre' data-nombre_per='Apellido de la Persona' placeholder='Ingresa tu Apellido (Opcional)'>
+			<input type="text" id='correo' class="input" data-priv='required' data-type='correo' data-nombre_per='Correo de la Persona' placeholder='Ingresa tu Correo'>
+			<input type="text" id='pais' class="input" placeholder='Ingresa tu País (Opcional)' data-priv='optional' data-type='nombre' data-nombre_per='País de la Persona'>
+			<input type="button" value='Revisar' onclick='ultimate_validator_v3({"nombre":$("#nombre").val(),"edad":parseInt($("#edad").val()),"sexo":$("#sexo").val(),"comida":$("#comida").val(),"musica":$("#musica").val(),"apellido":$("#apellido").val(),"pais":$("#pais").val(),"fecha":$("#fecha").val(),"hora":$("#hora").val(),"correo":$("#correo").val()})'>
+		</form>
+	</div>
+</body>
+</html>
