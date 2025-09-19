@@ -34,9 +34,10 @@ function ultimate_validator_v4 (datos) {
 		if (estado === true) {
 			console.log("Verdadero, pase pa lante Rey");
 			let {values,error,tipo} = verificar(valores[cont],ID);
-			if (values) {
+			if (Object.values(values).length > 0) {
 				new_values[ID] = values;
-				privilegio[ID] = "Positivo";
+				errors[ID] = error;
+				privilegio[ID] = tipo;
 				console.log(values);
 			} else {
 				errors[ID] = error;
@@ -47,7 +48,6 @@ function ultimate_validator_v4 (datos) {
 			let {values, error} = verificar_privi(valores[cont],ID);
 			if (values) {
 				new_values[ID] = values;
-				errors[ID] = error;
 				privilegio[ID] = error;
 			} else {
 				console.log("Algo Muy malo pasa");
@@ -63,7 +63,11 @@ function ultimate_validator_v4 (datos) {
 	console.log("Privilegios/Estados");
 	console.log(privilegio);
 	messages(errors,privilegio);
-	return {"values":new_values,"error":errors, "tipo":privilegio};
+	if (Object.keys(errors).length > 0) {
+
+	} else {
+		return {"values":new_values, "error":errors, "tipo":privilegio};
+	}	
 }
 
 function verificar (settings,ID) {
@@ -84,7 +88,7 @@ function verificar (settings,ID) {
 			break;
 		case "object":
 			var {values, error, tipo} = procesar_objeto(settings,ID);
-			console.log(values);
+			console.log(values);console.log(error);console.log(tipo);
 			return {values, error, tipo};
 			break;
 		default:
@@ -121,7 +125,7 @@ function verificar_tipo (settings,ID) {
 		if (clean_data.match(regex[tipo]) === null) {
 			console.log("Error: Es NULL :(");
 			let {values,error} = verificar_privi(settings,ID);
-			return {"values": values, "error":`Falta algún dato o estás usando Caracteres no permitidos en ${nombre_per}`, "tipo": error};
+			return {"values": values, "error":`Falta algún dato o estás usando Caracteres no permitidos en ${nombre_per}`, "tipo": "Negativo"};
 		} else {
 			console.log("Passing");
 			console.log(clean_data.match(regex[tipo]));
@@ -131,7 +135,7 @@ function verificar_tipo (settings,ID) {
 			if (decision===false) {
 				console.log("Algo Falta");
 				let {error} = verificar_privi(settings,ID);
-				return {"values":undefined, "error":`Falta algún dato o estás usando Caracteres no permitidos en ${nombre_per}`, "tipo": error};
+				return {"values":undefined, "error":`Falta algún dato o estás usando Caracteres no permitidos en ${nombre_per}`, "tipo": "Negativo"};
 			} else {
 				console.log("Exitos");
 				return {"values":clean_data, "error": undefined, "tipo":"Positivo"};
@@ -155,6 +159,8 @@ function procesar_objeto (settings,ID) {
 			console.log(error);
 			console.log(tipo);
 			data_array.push(values);
+			errors = error;
+			privilegio = tipo;
 		} else {
 			console.warn('Mensajes de Fallo');
 			console.log(values);
@@ -168,7 +174,7 @@ function procesar_objeto (settings,ID) {
 	let valores_cad = data_array.join(",");
 	console.warn('Mensajes de Producción');
 	console.log(errors);
-	console.log(privilegio);
+	console.log(privilegio.match("/(Negativo)/g"));
 	return {"values":valores_cad, "error": errors, "tipo": privilegio};
 }
 
@@ -233,7 +239,7 @@ function messages (errors,tipo) {
 	console.log("Tipos");
 	console.log(tipo);
 	let cont = -1;
-	let Fallo = /(Requerido)|(Opcional)|(Positivo)/g;
+	let Fallo = /(Requerido)|(Opcional)|(Positivo)|(Negativo)/g;
 	let IDS = Object.keys(tipo);
 	let message = Object.values(errors);
 	let tipos = Object.values(tipo);
@@ -255,6 +261,9 @@ function messages (errors,tipo) {
 				break;
 			case "Positivo":
 				$(`#${id}`).css("border-color",'#31FF27');
+				break;
+			case "Negativo":
+				$(`#${id}`).css("border-color",'#FF1E33');
 				break;
 			default:
 				console.log("Nothing is Working");
