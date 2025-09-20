@@ -11,48 +11,34 @@ const regex = {
 }
 //
 function uvv4 (datos) {
-	console.log(datos);
 	const ids = Object.keys(datos);
 	const valores = Object.values(datos);
 	let new_values = {};
 	let errors = {};
 	let privilegio = {};
 	ids.forEach((ID,indexOf) => {
-		console.log(`Valor de: ${ID}`);
-		console.log(valores[indexOf].valor);
 		const {estado,tipo} = isEmpty(valores[indexOf].valor);
-		console.log(`Estado: ${estado} y Tipo: ${tipo}`);
 		if (estado === true) {
-			console.log("Lleno, Pasando a Validación");
 			let {values,error,tipo} = verificar(valores[indexOf],ID);
 			if (values) {
 				new_values[ID] = values;
 				errors[ID] = error;
 				privilegio[ID] = tipo;
-				console.log(values);
 			} else {
 				errors[ID] = error;
 				privilegio[ID] = tipo;
 			}
 		} else {
-			console.log("Vacío, Pasando a Verificación de Privilegio");
 			let {values, error} = verifyPrivi(valores[indexOf],ID);
 			if (values) {
 				new_values[ID] = values;
 				privilegio[ID] = error;
 			} else {
-				console.log("Definitivamente Vacío");
 				errors[ID] = error;
 				privilegio[ID] = error;
 			}
 		}
 	});
-	console.log("Valores");
-	console.log(new_values);
-	console.log("Errores");
-	console.log(errors);
-	console.log("Privilegios/Estados");
-	console.log(privilegio);
 	messages(errors,privilegio);
 	let {cleanErrors} = removeUndefined(errors);
 	if (cleanErrors.length > 0) {
@@ -63,7 +49,6 @@ function uvv4 (datos) {
 }
 
 function verificar (settings,ID) {
-	console.log(`Verificando el Valor: ${settings.valor} del Elemento: ${ID} y su Tipo es: ${typeof settings.valor}`);
 	switch (typeof settings.valor) {
 		case "string":
 			var {values, error, tipo} = verifyType(settings,ID);
@@ -80,7 +65,6 @@ function verificar (settings,ID) {
 			break;
 		case "object":
 			var {values, error, tipo} = procesar_objeto(settings,ID);
-			console.log(values);console.log(error);console.log(tipo);
 			return {values, error, tipo};
 			break;
 		default:
@@ -90,46 +74,35 @@ function verificar (settings,ID) {
 }
 
 function verifyType (settings,ID) {
-	console.log(`Verificando Tipos: ${settings.valor} de ${ID}`);
 	const datos = settings.valor;
 	const tipo = settings.tipo;
 	const nombre_per = settings.nombre_per;
 	if (typeof datos === "number") {
 		let clean_data = limpiar_datos(datos.toString());
 		let datos_validos = clean_data.match(regex[tipo]).join("");
-		console.log(`Datos Válidos: ${datos_validos} Datos Limpios: ${clean_data} Tipo: ${typeof clean_data} Tipo Esperado: ${tipo}`);
 		let decision = comparador(clean_data,datos_validos);
 		if (decision ===false ) {
-			console.log("Algo Falta");
 			let {error} = verifyPrivi(settings,ID);
 			return {"values":undefined, "error": failMessage(nombre_per), "tipo": error};
 		} else {
 			if (datos_validos.includes(".")) {				
-				console.log("Exitos Flotantes");
 				return {"values": parseFloat(clean_data), "error": undefined, "tipo":"Positivo"};
 			} else {
-				console.log("Exitos Enteros");
 				return {"values": parseInt(clean_data), "error": undefined, "tipo":"Positivo"};
 			}
 		}
 	} else {
 		let clean_data = limpiar_datos(settings.valor);
 		if (clean_data.match(regex[tipo]) === null) {
-			console.error("Error: No Coincide");
 			let {values,error} = verifyPrivi(settings,ID);
 			return {"values": undefined, "error": failMessage(nombre_per), "tipo": "Negativo"};
 		} else {
-			console.log("Exito: Coincidencias Encotradas");
-			console.log(clean_data.match(regex[tipo]));
 			let datos_validos = clean_data.match(regex[tipo]).join(" ");
-			console.log(`Datos Válidos: ${datos_validos} Datos Limpios: ${clean_data}, Tipo de Dato: ${typeof clean_data},  Tipo de Validación: ${tipo}`);
 			let decision = comparador(clean_data,datos_validos);
 			if (decision === false) {
-				console.error("Los Datos no Tienen la Misma Longitud");
 				let {values,error} = verifyPrivi(settings,ID);
 				return {"values": values, "error": failMessage(nombre_per), "tipo": "Negativo"};
 			} else {
-				console.log("Exitos");
 				return {"values": clean_data, "error": undefined, "tipo":"Positivo"};
 			}
 		}
@@ -137,7 +110,6 @@ function verifyType (settings,ID) {
 }
 
 function procesar_objeto (settings,ID) {
-	console.log(`Procesando Objt ${settings.valor} de ${ID}`);
 	let new_data = Object.values(settings.valor);
 	let data_array = [];
 	let errors = [];
@@ -146,28 +118,16 @@ function procesar_objeto (settings,ID) {
 		settings.valor = valores;
 		let {values, error, tipo} = verificar(settings,ID);
 		if (values) {
-			console.log('Mensajes de Exito');
-			console.log(values);
-			console.log(error);
-			console.log(tipo);
 			data_array.push(values);
 			errors.push(error);
 			privilegio.push(tipo);
 		} else {
-			console.warn('Mensajes de Fallo');
-			console.log(values);
-			console.log(error);
-			console.log(tipo);
 			data_array.push(values);
 			errors.push(error);
 			privilegio.push(tipo);
 		}
 	});
 	let valores_cad = data_array.join(",");
-	console.warn('Mensajes de Producción');
-	console.log(errors);
-	console.log(privilegio);
-	/*console.log(privilegio.match(/(Negativo)/g));*/
 	if (privilegio.includes("Negativo")) {
 		return {"values": undefined, "error": failMessage(settings.nombre_per), "tipo": "Negativo"};	
 	} else {
@@ -176,20 +136,16 @@ function procesar_objeto (settings,ID) {
 }
 
 function limpiar_datos (datos) {
-	console.log(`Limpiando: ${datos}`);
 	if (typeof datos === "number") {
 		const clean_data = datos;
-		console.log(`Limpio Numero: ${clean_data} y Tipo ${typeof clean_data}`);
 		return clean_data;
 	} else {
 		const clean_data = datos.replace(/\s+/g, ' ').trim();
-		console.log(`Limpio: ${clean_data}`);
 		return clean_data;
 	}
 }
 
 function comparador (datos,datos_limpios) {
-	console.log(`Comparando ${datos} y ${datos_limpios}`);
 	let longitud_neta = length_data(datos);
 	let longitud_limpia = length_data(datos_limpios);
 	if (longitud_neta!=longitud_limpia) {
@@ -200,21 +156,17 @@ function comparador (datos,datos_limpios) {
 }
 
 function length_data (datos) {
-	console.log(`Midiendo ${datos}`);
 	let {estado,tipo} = isEmpty(datos);
 	if (estado === true) {
 		const length_datos = datos.split("").length;
-		console.log(`Datos Medidos ${length_datos}`);
 		return length_datos;
 	} else {
 		const length_datos = 0;
-		console.log(`Datos Medidos ${length_datos}`);
 		return length_datos;
 	}
 }
 
 function verifyPrivi (settings,ID) {
-	console.log(`Verificando Privilegios de: ${ID}`);
 	let apodo = settings.nombre_per;
 	switch (settings.privi) {
 		case "required":
@@ -266,10 +218,6 @@ function isEmpty (datos) {
 }
 
 function messages (errors,tipo) {
-	console.log("Errores");
-	console.log(errors);
-	console.log("Tipos");
-	console.log(tipo);
 	let Fallo = /(Requerido)|(Opcional)|(Positivo)|(Negativo)/g;
 	let IDS = Object.keys(tipo);
 	let message = Object.values(errors);

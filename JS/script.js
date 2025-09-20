@@ -1,6 +1,4 @@
 function sendThis (data) {
-	console.log("Datos Netos");
-	console.log(data);
 	let cont = -1;
 	let newData = {};
 	newData["nombre"] = {"tipo":"nombre","valor": data.nombre, "nombre_per": "Nombre Usuario", "privi": "required"};
@@ -13,11 +11,7 @@ function sendThis (data) {
 	newData["apellido"] = {"tipo":"nombre","valor": data.apellido, "nombre_per": "Apellido", "privi": "optional"};
 	newData["correo"] = {"tipo":"correo","valor": data.correo, "nombre_per": "Correo Electrónico", "privi": "optional"};
 	newData["pais"] = {"tipo":"nombre","valor": data.pais, "nombre_per": "País de Nacimiento", "privi": "optional"};
-	console.log(newData);
 	let {values,error,tipo} = uvv4(newData);
-	console.log(values);
-	console.error(error);
-	console.warn(tipo);
 	if (error.length > 0) {
 		console.error("Quedan Errores");
 	} else {
