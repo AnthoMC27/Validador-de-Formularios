@@ -14,4 +14,4 @@
 Esto con el fin de que la información no quede tan expuesta.
 
 >[!IMPORTANT]
->Ver el Archivo [script.js](script.js) para entender mejor lo que digo.
+>Ver el Archivo [script.js](JS/script.js) para entender mejor lo que digo.
