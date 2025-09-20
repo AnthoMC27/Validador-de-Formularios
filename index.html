@@ -5,8 +5,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="CSS/styles.css">
 	<script type="text/javascript" src="jQuery/jquery-3.7.1.js" defer></script>
-	<script type="text/javascript" src="JS/validatorv3.js" defer></script>
-	<title>Validador de FormulariosV3</title>
+	<script type="text/javascript" src="JS/validatorv4.1.js" defer></script>
+	<script type="text/javascript" src="JS/script.js" defer></script>
+	<title>Validador de FormulariosV4</title>
 </head>
 <body>
 	<div class="form_container">
@@ -35,7 +36,7 @@
 			<input type="text" id='apellido' class="input" data-priv='optional' data-type='nombre' data-nombre_per='Apellido de la Persona' placeholder='Ingresa tu Apellido (Opcional)'>
 			<input type="text" id='correo' class="input" data-priv='required' data-type='correo' data-nombre_per='Correo de la Persona' placeholder='Ingresa tu Correo'>
 			<input type="text" id='pais' class="input" placeholder='Ingresa tu País (Opcional)' data-priv='optional' data-type='nombre' data-nombre_per='País de la Persona'>
-			<input type="button" value='Revisar' onclick='ultimate_validator_v3({"nombre":$("#nombre").val(),"edad":parseInt($("#edad").val()),"sexo":$("#sexo").val(),"comida":$("#comida").val(),"musica":$("#musica").val(),"apellido":$("#apellido").val(),"pais":$("#pais").val(),"fecha":$("#fecha").val(),"hora":$("#hora").val(),"correo":$("#correo").val()})'>
+			<input type="button" value='Revisar' onclick='sendThis({"nombre":$("#nombre").val(),"edad":parseInt($("#edad").val()),"sexo":$("#sexo").val(),"comida":$("#comida").val(),"musica":$("#musica").val(),"apellido":$("#apellido").val(),"pais":$("#pais").val(),"fecha":$("#fecha").val(),"hora":$("#hora").val(),"correo":$("#correo").val()})'>
 		</form>
 	</div>
 </body>
