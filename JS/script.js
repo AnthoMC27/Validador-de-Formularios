@@ -16,5 +16,11 @@ function sendThis (data) {
 	console.log(newData);
 	let {values,error,tipo} = uvv4(newData);
 	console.log(values);
-	
+	console.error(error);
+	console.warn(tipo);
+	if (error.length > 0) {
+		console.error("Quedan Errores");
+	} else {
+		console.log("Todo Bien");
+	}
 }

@@ -53,6 +53,13 @@ function uvv4 (datos) {
 	console.log(errors);
 	console.log("Privilegios/Estados");
 	console.log(privilegio);
+	messages(errors,privilegio);
+	let {cleanErrors} = removeUndefined(errors);
+	if (cleanErrors.length > 0) {
+		return {"values":undefined, "error": cleanErrors, "tipo":privilegio};
+	} else {
+		return {"values":new_values, "error": cleanErrors, "tipo":privilegio};
+	}
 }
 
 function verificar (settings,ID) {
@@ -258,6 +265,60 @@ function isEmpty (datos) {
 	}
 }
 
+function messages (errors,tipo) {
+	console.log("Errores");
+	console.log(errors);
+	console.log("Tipos");
+	console.log(tipo);
+	let Fallo = /(Requerido)|(Opcional)|(Positivo)|(Negativo)/g;
+	let IDS = Object.keys(tipo);
+	let message = Object.values(errors);
+	let tipos = Object.values(tipo);
+	$(`#messages`).html("");
+	IDS.forEach((id,indexOf)=>{
+		if (message[indexOf] === undefined) {
+			
+		} else {
+			$(`#messages`).append(`<p class='error' onclick='close_this(this)'>${message[indexOf]}</p>`);
+		}
+		let similars = tipos[indexOf].match(Fallo).join("");
+		switch (similars) {
+			case "Requerido":
+				$(`#${id}`).css("border-color",'#FF1E33');
+				break;
+			case "Opcional":
+				$(`#${id}`).css("border-color",'#4D4D4D');
+				break;
+			case "Positivo":
+				$(`#${id}`).css("border-color",'#31FF27');
+				break;
+			case "Negativo":
+				$(`#${id}`).css("border-color",'#FF1E33');
+				break;
+			default:
+				console.log("Nothing is Working");
+				break;
+		}
+	});
+}
+
 function failMessage (element) {
 	return `Falta algún dato o estás usando Caracteres no permitidos en ${element}`;
+}
+
+function removeUndefined (data) {
+	let errors = Object.values(data);
+	let purifiedErrors = [];
+	errors.forEach((error,indexOf) => {
+		if (error === undefined) {
+			
+		} else {
+			purifiedErrors.push(error);
+		}
+	});
+	return {"cleanErrors": purifiedErrors};
+}
+
+function close_this (element) {
+ 	$(element).remove();
 }
