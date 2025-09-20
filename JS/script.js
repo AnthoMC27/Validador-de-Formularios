@@ -14,11 +14,7 @@ function sendThis (data) {
 	newData["correo"] = {"tipo":"correo","valor": data.correo, "nombre_per": "Correo Electrónico", "privi": "optional"};
 	newData["pais"] = {"tipo":"nombre","valor": data.pais, "nombre_per": "País de Nacimiento", "privi": "optional"};
 	console.log(newData);
-	let {values,error,tipo} = ultimate_validator_v4(newData);
+	let {values,error,tipo} = uvv4(newData);
 	console.log(values);
-	if (Object.keys(error).length > 0) {
-		$("#messages").html("Hay Errores Todavía");
-	} else {
-		$("#messages").html("Todo Bien");
-	}
+	
 }
