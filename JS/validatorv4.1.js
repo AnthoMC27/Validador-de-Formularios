@@ -95,7 +95,7 @@ function verifyType (settings,ID) {
 		if (decision ===false ) {
 			console.log("Algo Falta");
 			let {error} = verifyPrivi(settings,ID);
-			return {"values":undefined, "error":`Falta algún dato o estás usando Caracteres no permitidos en ${nombre_per}`, "tipo": error};
+			return {"values":undefined, "error": failMessage(nombre_per), "tipo": error};
 		} else {
 			if (datos_validos.includes(".")) {				
 				console.log("Exitos Flotantes");
@@ -110,7 +110,7 @@ function verifyType (settings,ID) {
 		if (clean_data.match(regex[tipo]) === null) {
 			console.error("Error: No Coincide");
 			let {values,error} = verifyPrivi(settings,ID);
-			return {"values": values, "error":`Falta algún dato o estás usando Caracteres no permitidos en ${nombre_per}`, "tipo": "Negativo"};
+			return {"values": undefined, "error": failMessage(nombre_per), "tipo": "Negativo"};
 		} else {
 			console.log("Exito: Coincidencias Encotradas");
 			console.log(clean_data.match(regex[tipo]));
@@ -120,7 +120,7 @@ function verifyType (settings,ID) {
 			if (decision === false) {
 				console.error("Los Datos no Tienen la Misma Longitud");
 				let {values,error} = verifyPrivi(settings,ID);
-				return {"values": values, "error":`Falta algún dato o estás usando Caracteres no permitidos en ${nombre_per}`, "tipo": "Negativo"};
+				return {"values": values, "error": failMessage(nombre_per), "tipo": "Negativo"};
 			} else {
 				console.log("Exitos");
 				return {"values": clean_data, "error": undefined, "tipo":"Positivo"};
@@ -133,8 +133,8 @@ function procesar_objeto (settings,ID) {
 	console.log(`Procesando Objt ${settings.valor} de ${ID}`);
 	let new_data = Object.values(settings.valor);
 	let data_array = [];
-	let errors;
-	let privilegio;
+	let errors = [];
+	let privilegio = [];
 	new_data.forEach((valores)=>{
 		settings.valor = valores;
 		let {values, error, tipo} = verificar(settings,ID);
@@ -144,23 +144,28 @@ function procesar_objeto (settings,ID) {
 			console.log(error);
 			console.log(tipo);
 			data_array.push(values);
-			errors = error;
-			privilegio = tipo;
+			errors.push(error);
+			privilegio.push(tipo);
 		} else {
 			console.warn('Mensajes de Fallo');
 			console.log(values);
 			console.log(error);
 			console.log(tipo);
 			data_array.push(values);
-			errors = error;
-			privilegio = tipo;
+			errors.push(error);
+			privilegio.push(tipo);
 		}
 	});
 	let valores_cad = data_array.join(",");
 	console.warn('Mensajes de Producción');
 	console.log(errors);
-	console.log(privilegio.match(/(Negativo)/g));
-	return {"values":valores_cad, "error": errors, "tipo": privilegio};
+	console.log(privilegio);
+	/*console.log(privilegio.match(/(Negativo)/g));*/
+	if (privilegio.includes("Negativo")) {
+		return {"values": undefined, "error": failMessage(settings.nombre_per), "tipo": "Negativo"};	
+	} else {
+		return {"values":valores_cad, "error": undefined, "tipo": privilegio[0]};
+	}
 }
 
 function limpiar_datos (datos) {
@@ -251,4 +256,8 @@ function isEmpty (datos) {
 			console.log("Ningun Tipo Esperado");
 			break;
 	}
+}
+
+function failMessage (element) {
+	return `Falta algún dato o estás usando Caracteres no permitidos en ${element}`;
 }
